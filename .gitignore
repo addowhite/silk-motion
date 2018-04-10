@@ -58,11 +58,3 @@ typings/
 .env
 
 build/
-
-# Don't commit files in the dist folder (these should be built to ensure it's up-to-date)
-dist/*
-
-# Can't commit empty folders to git, but if the dist folder doesn't exist then uglify can't output transpiled files to it
-# So we put an empty file in the dist folder to hack around the problem
-!dist/.gitkeep
-package-lock.json
