@@ -22,11 +22,11 @@ In the case that you have multiple update loops running at different rates you c
 Create `Clock` instance with `var myClock = new SM.Clock()`, then calling `myClock.tick()` will return the elapsed milliseconds since the last tick.
 
 The `SM.Motion` class is what actually handles the motion integration.
-Create an instance with `var myMovement = new SM.Motion(posX, posY, velX, velY, accX, accY, jerkX, jerkY)`, all arguments are optional and will default to zero if ommited, null or undefined.
+Create an instance with `var myMovement = new SM.Motion(posX, posY, velX, velY, accX, accY, jerkX, jerkY)`, all arguments are optional and will default to zero if omitted, null or undefined.
 These values can also be set with `myMovement.acc.x = 10` or `myMovement.pos.y = 20` etc.
 
-Then you can call `myMovement.getFuture(milliseconds)` which does not modify the `Motion` instance and instead returns a new `Motion` representing the future state of the `Motion`.
-This means that integrated, framerate-independant motion can be acheived simply by running the following code every frame:
+You can then call `myMovement.getFuture(milliseconds)` which does not modify the `Motion` instance and instead returns a new `Motion` representing the future state.
+This means that integrated, framerate-independant motion can be achieved simply by running the following code every frame:
 ```
 SM.Time.update();
 myMovement = myMovement.getFuture(SM.Time.deltaTime);
