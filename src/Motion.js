@@ -9,15 +9,18 @@
       this.jerk = new SM.Vector(...args.slice(6, 2));
     }
 
+    copy() {
+      let copy = new Motion();
+      copy.pos = this.pos.copy();
+      copy.vel = this.vel.copy();
+      copy.acc = this.acc.copy();
+      copy.jerk = this.jerk.copy();
+      return copy;
+    }
+
     getFuture(time) {
       time /= 1000;
-      let future = new Motion();
-
-      future.pos = this.pos.copy();
-      future.vel = this.vel.copy();
-      future.acc = this.acc.copy();
-      future.jerk = this.jerk.copy();
-
+      let future = this.copy();
 
       future.pos = future.pos
         .add(future.vel.mul(time))
