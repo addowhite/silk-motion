@@ -1,0 +1,22 @@
+{
+  "name": "silk-motion",
+  "version": "0.0.1",
+  "description": "A javascript library that handles integration of motion irrespective of framerate.",
+  "scripts": {
+    "transpile_es6": "babel ./src -d ./build",
+    "uglify": "./node_modules/.bin/uglifyjs ./build/SilkMotion.js ./build/Clock.js ./build/Time.js ./build/Vector.js ./build/Motion.js -c -m -o ./dist/silk-motion-min.js",
+    "build": "npm run transpile_es6 && npm run uglify"
+  },
+  "author": "addowhite@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "uglify-js": "^3.3.20"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  }
+}
