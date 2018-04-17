@@ -4,11 +4,19 @@
 
     constructor() {
       this.tick();
+      this.tps = 0;
+      this.tpsTickCount = 0;
+      this.tpsElapsedTime = 0;
     }
 
     tick() {
-      const prev = this.lastTick;
-      return (this.lastTick = performance.now()) - prev;
+      this.tpsTickCount++;
+      const timeDiff = -this.lastTick + (this.lastTick = performance.now());
+      if ((this.tpsElapsedTime += timeDiff) > 1000) {
+        this.tps = this.tpsTickCount / this.tpsElapsedTime * 1000;
+        this.tpsTickCount = this.tpsElapsedTime = 0;
+      }
+      return timeDiff;
     }
 
   }
