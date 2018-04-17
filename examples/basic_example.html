@@ -2,100 +2,100 @@
 <html>
 
 <head>
-    <title>Silk Motion Example</title>
-    <script src="../dist/silk-motion-min.js"></script>
+  <title>Silk Motion Example</title>
+  <script src="../dist/silk-motion-min.js"></script>
 </head>
 
 <body>
 
-    <canvas id="canvas" width="1000" height="500"></canvas>
+  <canvas id="canvas" width="1000" height="500"></canvas>
 
-    <script type="text/javascript">
-    // Global variables
-    let canvas, context,
-        motion1, motion2,
-        slowClock = new SM.Clock(),
-        motionTrace = [];
-
-
-    // Set everything up when the page loads
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // Get the canvas and rendering context
-        canvas = document.getElementById("canvas");
-        context = canvas.getContext('2d');
-
-        // Create the moving bodies
-        motion1 = new SM.Motion(canvas.width * .1, canvas.height * .2);
-        motion2 = new SM.Motion(canvas.width * .1, canvas.height * .6);
-
-        // Set the initial velocity and the jerk of them both
-        motion1.vel.x = motion2.vel.x = 100;
-        motion1.vel.y = motion2.vel.y = 4;
-        motion1.jerk.x = motion2.jerk.x = -1.5;
-
-        // Save the starting positions of the circles
-        motionTrace.push(motion1.pos.copy());
-        motionTrace.push(motion2.pos.copy());
-
-        // Render the first frame and trigger the repeated rendering of frames
-        render();
-
-    });
+  <script type="text/javascript">
+  // Global variables
+  let canvas, context,
+    motion1, motion2,
+    slowClock = new SM.Clock(),
+    motionTrace = [];
 
 
-    // Update the lower circle every half second
-    window.setInterval(() => {
-        motion2 = motion2.getFuture(slowClock.tick());
-    }, 500);
+  // Set everything up when the page loads
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Get the canvas and rendering context
+    canvas = document.getElementById("canvas");
+    context = canvas.getContext('2d');
+
+    // Create the moving bodies
+    motion1 = new SM.Motion(canvas.width * .1, canvas.height * .2);
+    motion2 = new SM.Motion(canvas.width * .1, canvas.height * .6);
+
+    // Set the initial velocity and the jerk of them both
+    motion1.vel.x = motion2.vel.x = 100;
+    motion1.vel.y = motion2.vel.y = 4;
+    motion1.jerk.x = motion2.jerk.x = -1.5;
+
+    // Save the starting positions of the circles
+    motionTrace.push(motion1.pos.copy());
+    motionTrace.push(motion2.pos.copy());
+
+    // Render the first frame and trigger the repeated rendering of frames
+    render();
+
+  });
 
 
-    // Update the upper circle and render a frame at the refresh-rate of the display
-    function render() {
+  // Update the lower circle every half second
+  window.setInterval(() => {
+    motion2 = motion2.getFuture(slowClock.tick());
+  }, 500);
 
-        // Tick SMs internal clock so it can calculate things like fps and deltaTime. This is required for integration of motion.
-        SM.Time.update();
 
-        // Get the state of the moving body at a future point in time
-        motion1 = motion1.getFuture(SM.Time.deltaTime);
+  // Update the upper circle and render a frame at the refresh-rate of the display
+  function render() {
 
-        // Draw the historical positions of the circles
-        context.fillStyle = '#333';
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.beginPath();
-        for (trace of motionTrace) {
-            context.moveTo(trace.x + 30, trace.y);
-            context.arc(trace.x, trace.y, 30, 0, 2 * Math.PI);
-        }
-        context.lineWidth = 2;
-        context.strokeStyle = '#c00';
-        context.stroke();
+    // Tick SMs internal clock so it can calculate things like fps and deltaTime. This is required for integration of motion.
+    SM.Time.update();
 
-        // Draw the current positions of the circles
-        context.beginPath();
-        context.arc(motion1.pos.x, motion1.pos.y, 20, 0, 2 * Math.PI);
-        context.arc(motion2.pos.x, motion2.pos.y, 20, 0, 2 * Math.PI);
-        context.fillStyle = '#ccc';
-        context.fill();
+    // Get the state of the moving body at a future point in time
+    motion1 = motion1.getFuture(SM.Time.deltaTime);
 
-        context.fillStyle = '#ccc';
-        context.font = '16px Arial';
-        context.fillText(String(SM.Time.fps.toFixed(2)) + ' fps', 70, canvas.height * .2 - 50);
-        context.fillText(String(slowClock.tps.toFixed(2)) + ' fps', 70, canvas.height * .6 - 50);
-
-        // Repeat at the refresh-rate of the display
-        window.requestAnimationFrame(render);
-
+    // Draw the historical positions of the circles
+    context.fillStyle = '#333';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.beginPath();
+    for (trace of motionTrace) {
+      context.moveTo(trace.x + 30, trace.y);
+      context.arc(trace.x, trace.y, 30, 0, 2 * Math.PI);
     }
+    context.lineWidth = 2;
+    context.strokeStyle = '#c00';
+    context.stroke();
+
+    // Draw the current positions of the circles
+    context.beginPath();
+    context.arc(motion1.pos.x, motion1.pos.y, 20, 0, 2 * Math.PI);
+    context.arc(motion2.pos.x, motion2.pos.y, 20, 0, 2 * Math.PI);
+    context.fillStyle = '#ccc';
+    context.fill();
+
+    context.fillStyle = '#ccc';
+    context.font = '16px Arial';
+    context.fillText(String(SM.Time.fps.toFixed(2)) + ' fps', 70, canvas.height * .2 - 50);
+    context.fillText(String(slowClock.tps.toFixed(2)) + ' fps', 70, canvas.height * .6 - 50);
+
+    // Repeat at the refresh-rate of the display
+    window.requestAnimationFrame(render);
+
+  }
 
 
-    // Save the current position of both circles every second
-    window.setInterval(() => {
-        motionTrace.push(motion1.pos.copy());
-        motionTrace.push(motion2.pos.copy());
-    }, 1000);
+  // Save the current position of both circles every second
+  window.setInterval(() => {
+    motionTrace.push(motion1.pos.copy());
+    motionTrace.push(motion2.pos.copy());
+  }, 1000);
 
-    </script>
+  </script>
 
 </body>
 
